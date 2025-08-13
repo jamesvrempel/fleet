@@ -1,0 +1,78 @@
+{
+	"charts": [],
+	"content": "[{\"id\":\"M6BgSm13Kd\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Fleet Home\",\"col\":12}},{\"id\":\"5FVaN_7leD\",\"type\":\"card\",\"data\":{\"card_name\":\"Fleet\",\"col\":3}},{\"id\":\"Rn8ppwkzAd\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Vehicle Battery Voltage\",\"col\":3}}]",
+	"creation": "2024-11-13 18:23:20.509684",
+	"custom_blocks": [
+		{
+			"custom_block_name": "Fleet Home",
+			"label": "Fleet Home"
+		},
+		{
+			"custom_block_name": "Vehicle Battery Voltage",
+			"label": "Vehicle Battery Voltage"
+		}
+	],
+	"docstatus": 0,
+	"doctype": "Workspace",
+	"for_user": "",
+	"hide_custom": 0,
+	"icon": "fleet",
+	"idx": 0,
+	"indicator_color": "",
+	"is_hidden": 0,
+	"label": "Fleet",
+	"links": [
+		{
+			"hidden": 0,
+			"is_query_report": 0,
+			"label": "Fleet",
+			"link_count": 4,
+			"link_type": "DocType",
+			"onboard": 0,
+			"type": "Card Break"
+		},
+		{
+			"hidden": 0,
+			"is_query_report": 0,
+			"label": "Vehicle",
+			"link_count": 0,
+			"link_to": "Vehicle",
+			"link_type": "DocType",
+			"onboard": 0,
+			"type": "Link"
+		},
+		{
+			"hidden": 0,
+			"is_query_report": 0,
+			"label": "Driver",
+			"link_count": 0,
+			"link_to": "Driver",
+			"link_type": "DocType",
+			"onboard": 0,
+			"type": "Link"
+		},
+		{
+			"hidden": 0,
+			"is_query_report": 0,
+			"label": "Location",
+			"link_count": 0,
+			"link_to": "Location",
+			"link_type": "DocType",
+			"onboard": 0,
+			"type": "Link"
+		}
+	],
+	"modified": "2025-04-09 19:13:54.675022",
+	"modified_by": "Administrator",
+	"module": "Fleet",
+	"name": "Fleet",
+	"number_cards": [],
+	"owner": "Administrator",
+	"parent_page": "",
+	"public": 1,
+	"quick_lists": [],
+	"roles": [],
+	"sequence_id": 1.0,
+	"shortcuts": [],
+	"title": "Fleet"
+}

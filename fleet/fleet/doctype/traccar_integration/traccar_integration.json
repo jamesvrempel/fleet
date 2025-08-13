@@ -1,0 +1,142 @@
+{
+	"actions": [],
+	"creation": "2024-11-01 09:02:44.862385",
+	"doctype": "DocType",
+	"engine": "InnoDB",
+	"field_order": [
+		"integration_tab",
+		"enable_traccar",
+		"server_info_section",
+		"traccar_server_url",
+		"encoded_credentials",
+		"traccar_distance_uom",
+		"erpnext_distance_uom",
+		"distance_conversion_factor",
+		"column_break_ewch",
+		"username",
+		"password",
+		"notifications_tab",
+		"notification_settings_section",
+		"external_battery_low_threshold",
+		"battery_level_notification"
+	],
+	"fields": [
+		{
+			"fieldname": "server_info_section",
+			"fieldtype": "Section Break",
+			"label": "Server Info"
+		},
+		{
+			"default": "0",
+			"fieldname": "enable_traccar",
+			"fieldtype": "Check",
+			"label": "Enable Traccar"
+		},
+		{
+			"default": "https://access-group-tracking.wingstar.org",
+			"fieldname": "traccar_server_url",
+			"fieldtype": "Data",
+			"in_list_view": 1,
+			"label": "Traccar Server URL",
+			"reqd": 1
+		},
+		{
+			"fieldname": "username",
+			"fieldtype": "Data",
+			"in_list_view": 1,
+			"label": "Username",
+			"reqd": 1
+		},
+		{
+			"fieldname": "password",
+			"fieldtype": "Password",
+			"in_list_view": 1,
+			"label": "Password",
+			"reqd": 1
+		},
+		{
+			"fieldname": "encoded_credentials",
+			"fieldtype": "Data",
+			"hidden": 1,
+			"label": "Encoded Credentials",
+			"no_copy": 1
+		},
+		{
+			"fieldname": "notification_settings_section",
+			"fieldtype": "Section Break",
+			"label": "Notification Settings"
+		},
+		{
+			"fieldname": "external_battery_low_threshold",
+			"fieldtype": "Float",
+			"label": "External Battery Low Threshold",
+			"precision": "1"
+		},
+		{
+			"fieldname": "column_break_ewch",
+			"fieldtype": "Column Break"
+		},
+		{
+			"fieldname": "integration_tab",
+			"fieldtype": "Tab Break",
+			"label": "Integration"
+		},
+		{
+			"fieldname": "notifications_tab",
+			"fieldtype": "Tab Break",
+			"label": "Notifications"
+		},
+		{
+			"fieldname": "battery_level_notification",
+			"fieldtype": "Link",
+			"label": "Battery Level Notification",
+			"options": "Notification"
+		},
+		{
+			"fieldname": "traccar_distance_uom",
+			"fieldtype": "Link",
+			"label": "Traccar Distance UoM",
+			"options": "UOM"
+		},
+		{
+			"description": "Distance UoM for Vehicle Odometer and Delivery Trips",
+			"fieldname": "erpnext_distance_uom",
+			"fieldtype": "Link",
+			"label": "ERPNext Distance UoM",
+			"options": "UOM"
+		},
+		{
+			"depends_on": "eval:doc.traccar_distance_uom != doc.erpnext_distance_uom",
+			"fieldname": "distance_conversion_factor",
+			"fieldtype": "Link",
+			"label": "Distance Conversion Factor",
+			"mandatory_depends_on": "eval:doc.traccar_distance_uom != doc.erpnext_distance_uom",
+			"options": "UOM Conversion Factor"
+		}
+	],
+	"issingle": 1,
+	"links": [],
+	"modified": "2025-03-19 14:46:04.305632",
+	"modified_by": "Administrator",
+	"module": "Fleet",
+	"name": "Traccar Integration",
+	"owner": "Administrator",
+	"permissions": [
+		{
+			"create": 1,
+			"delete": 1,
+			"read": 1,
+			"role": "System Manager",
+			"write": 1
+		},
+		{
+			"read": 1,
+			"role": "Fleet Manager",
+			"write": 1
+		}
+	],
+	"sort_field": "modified",
+	"sort_order": "DESC",
+	"states": [],
+	"track_changes": 1
+}
