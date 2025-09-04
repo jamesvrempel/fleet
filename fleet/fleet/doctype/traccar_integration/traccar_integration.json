@@ -33,7 +33,7 @@
 			"label": "Enable Traccar"
 		},
 		{
-			"default": "https://access-group-tracking.wingstar.org",
+			"default": "https://tracking.enterprisesystems.com.au",
 			"fieldname": "traccar_server_url",
 			"fieldtype": "Data",
 			"in_list_view": 1,
