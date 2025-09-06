@@ -11,7 +11,6 @@
 			"fieldname": "state",
 			"fieldtype": "Data",
 			"label": "State",
-			"read_only": 1,
 			"unique": 1
 		},
 		{
@@ -27,8 +26,7 @@
 		{
 			"fieldname": "abbr",
 			"fieldtype": "Data",
-			"label": "Abbreviation",
-			"read_only": 1
+			"label": "Abbreviation"
 		}
 	],
 	"index_web_pages_for_search": 1,
