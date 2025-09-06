@@ -236,7 +236,7 @@ def add_traccar_device(vehicle_doc, method=None):
 				urljoin(traccar_server_url, "/api/devices"),
 				headers=headers,
 				timeout=10,
-				data=json.dumps(data),
+				json=data,
 			)
 			response.raise_for_status()
 			r = response.json()
@@ -261,20 +261,29 @@ def update_traccar_device(device_id, to_update):
 	headers = {"Authorization": f"Basic {credentials}", "Content-Type": "application/json"}
 
 	try:
-		device = get_traccar_device(device_id)
-		if not device:
-			frappe.throw(_("Device does not exist in Traccar"))
-		else:
-			device = dict(device)
-			to_update.update({"lastUpdate": int(time.time())})
-			data = device.update(to_update)
-			response = requests.put(
-				urljoin(traccar_server_url, f"/api/devices?id={device_id}"),
-				headers=headers,
-				timeout=10,
-				json=json.dumps(data),
-			)
-			response.raise_for_status()
+		# Get the device from Traccar to perform an update
+		get_response = requests.get(
+			urljoin(traccar_server_url, f"/api/devices?id={device_id}"),
+			headers=headers,
+			timeout=10,
+		)
+		get_response.raise_for_status()
+		devices = get_response.json()
+
+		if not devices:
+			frappe.throw(_("Device with ID {0} does not exist in Traccar").format(device_id))
+
+		device = devices[0]
+		device.update(to_update)
+		device["lastUpdate"] = int(time.time())
+
+		response = requests.put(
+			urljoin(traccar_server_url, f"/api/devices/{device_id}"),
+			headers=headers,
+			timeout=10,
+			json=device,
+		)
+		response.raise_for_status()
 
 	except requests.exceptions.RequestException as e:
 		frappe.throw(_("Traccar server error: {0}").format(str(e)))
@@ -294,7 +303,7 @@ def delete_traccar_device(device_id):
 
 	try:
 		response = requests.delete(
-			urljoin(traccar_server_url, f"/api/devices?id={device_id}"),
+			urljoin(traccar_server_url, f"/api/devices/{device_id}"),
 			headers=headers,
 			timeout=10,
 		)
@@ -361,7 +370,7 @@ def add_traccar_driver(driver_doc, method=None):
 				urljoin(traccar_server_url, "/api/drivers"),
 				headers=headers,
 				timeout=10,
-				data=json.dumps(data),
+				json=data,
 			)
 			response.raise_for_status()
 			r = response.json()
@@ -446,7 +455,7 @@ def add_traccar_geofence(doc, shape, coords, device_ids=None, group_ids=None):
 			urljoin(traccar_server_url, "/api/geofences"),
 			headers=headers,
 			timeout=10,
-			data=json.dumps(data),
+			json=data,
 		)
 		response.raise_for_status()
 		r = response.json()
@@ -477,11 +486,19 @@ def update_traccar_geofence(geofence_id, to_update):
 	headers = {"Authorization": f"Basic {credentials}", "Content-Type": "application/json"}
 
 	try:
+		geofences = get_traccar_geofences(geofence_id=geofence_id)
+		if not geofences:
+			frappe.log_error(f"Geofence with ID {geofence_id} not found in Traccar for update.")
+			return
+
+		geofence = geofences[0]
+		geofence.update(to_update)
+
 		response = requests.put(
-			urljoin(traccar_server_url, f"/api/geofences?id={geofence_id}"),
+			urljoin(traccar_server_url, f"/api/geofences/{geofence_id}"),
 			headers=headers,
 			timeout=10,
-			json=json.dumps(to_update),
+			json=geofence,
 		)
 		response.raise_for_status()
 
@@ -503,7 +520,7 @@ def delete_traccar_geofence(geofence_id):
 
 	try:
 		response = requests.delete(
-			urljoin(traccar_server_url, f"/api/geofences?id={geofence_id}"),
+			urljoin(traccar_server_url, f"/api/geofences/{geofence_id}"),
 			headers=headers,
 			timeout=10,
 		)
@@ -540,7 +557,7 @@ def link_traccar_object(first_param_key, first_param_val, second_param_key, seco
 			urljoin(traccar_server_url, "/api/permissions"),
 			headers=headers,
 			timeout=10,
-			data=json.dumps(data),
+			json=data,
 		)
 		response.raise_for_status()
 
@@ -575,7 +592,7 @@ def unlink_traccar_object(first_param_key, first_param_val, second_param_key, se
 			urljoin(traccar_server_url, "/api/permissions"),
 			headers=headers,
 			timeout=10,
-			data=json.dumps(data),
+			json=data,
 		)
 		response.raise_for_status()
 
