@@ -31,18 +31,18 @@ def before_test(company_name=None):
 	today = frappe.utils.getdate()
 	setup_complete(
 		{
-			"currency": "USD",
+			"currency": "AUD",
 			"full_name": "Administrator",
-			"company_name": "Quincy Cloudberry Farm",
-			"timezone": "America/New_York",
-			"time_zone": "America/New_York",
-			"company_abbr": "QCF",
+			"company_name": "Enterprise Systems AU",
+			"timezone": "Australia/Perth",
+			"time_zone": "Australia/Perth",
+			"company_abbr": "ESAU",
 			"domains": ["Distribution"],
-			"country": "United States",
+			"country": "Australia",
 			"fy_start_date": today.replace(month=1, day=1).isoformat(),
 			"fy_end_date": today.replace(month=12, day=31).isoformat(),
 			"language": "english",
-			"company_tagline": "Quincy Cloudberry Farm",
+			"company_tagline": "Enterprise Systems AU",
 			"email": "Administrator",
 			"password": "admin",
 			"chart_of_accounts": "Standard with Numbers",
@@ -56,9 +56,9 @@ def before_test(company_name=None):
 	create_test_data()
 
 
-def create_test_data(company_name="Quincy Cloudberry Farm"):
+def create_test_data(company_name="Enterprise Systems AU"):
 	setup_chart_of_accounts(company=company_name, chart_template="Farm")
-	default_currency = "USD"
+	default_currency = "AUD"
 	for account in frappe.get_all("Account"):
 		frappe.db.set_value(
 			"Account", account, "account_currency", default_currency, update_modified=False
@@ -83,22 +83,22 @@ def create_test_data(company_name="Quincy Cloudberry Farm"):
 	company_address = frappe.new_doc("Address")
 	company_address.title = settings.company
 	company_address.address_type = "Office"
-	company_address.address_line1 = "61 Deerfield Rd"
-	company_address.city = "Allenstown"
-	company_address.state = "NH"
-	company_address.pincode = "03275"
+	company_address.address_line1 = "123 George St"
+	company_address.city = "Sydney"
+	company_address.state = "NSW"
+	company_address.pincode = "2000"
 	company_address.is_your_company_address = 1
 	company_address.append("links", {"link_doctype": "Company", "link_name": settings.company})
 	company_address.save()
 	co = frappe.get_doc("Company", company_name)
 	co.tax_id = "04-9000561"
-	co.domain = "quincycloudberry.farm"
+	co.domain = "enterprisesystems.au"
 	co.save()
 
 	create_traccar_integration()
-	create_farm_shifts()
-	create_farm_employees()
-	setup_farm_price_list()
+	create_shifts()
+	create_employees_and_users()
+	setup_price_lists()
 	create_customers()
 	create_suppliers()
 	create_asset_categories_and_item_groups(settings)
@@ -134,31 +134,31 @@ def create_traccar_integration():
 		ti.save()
 
 
-def create_farm_shifts():
-	if not frappe.db.exists("Shift Type", "Farm Shift - QCF"):
+def create_shifts():
+	if not frappe.db.exists("Shift Type", "Standard Shift - ESAU"):
 		es = frappe.new_doc("Shift Type")
-		es.name = "Farm Shift - QCF"
+		es.name = "Standard Shift - ESAU"
 		es.start_time = "07:00:00"
 		es.end_time = "03:00:00"
 		es.save()
-	if not frappe.db.exists("Shift Type", "Office Hours - QFC"):
+	if not frappe.db.exists("Shift Type", "Office Hours - ESAU"):
 		ls = frappe.new_doc("Shift Type")
-		ls.name = "Office Hours - QCF"
+		ls.name = "Office Hours - ESAU"
 		ls.start_time = "09:00:00"
 		ls.end_time = "05:00:00"
 		ls.save()
 
 
-def create_farm_employees(company_name=None):
-	company_name = "Quincy Cloudberry Farm" if not company_name else company_name
+def create_employees_and_users(company_name=None):
+	company_name = "Enterprise Systems AU" if not company_name else company_name
 	settings = frappe._dict({"company": company_name, "shift_map": shift_map})
 	create_employees(settings, employees)
 
 
 shift_map = frappe._dict(
 	{
-		"Operations": ["Farm Shift - QCF"],
-		"Management": ["Office Hours - QCF"],
+		"Operations": ["Standard Shift - ESAU"],
+		"Management": ["Office Hours - ESAU"],
 	}
 )
 
@@ -170,9 +170,9 @@ employees = [
 		"date_of_joining": "2018-01-01",
 		"address": {
 			"address_line1": "1321 Mcdowell Shore",
-			"city": "Willmar",
-			"state": "RI",
-			"postal_code": "72012",
+			"city": "Sydney",
+			"state": "NSW",
+			"postal_code": "2000",
 		},
 		"phone": "(651) 911-2851",
 	},
@@ -183,9 +183,9 @@ employees = [
 		"date_of_joining": "2018-01-01",
 		"address": {
 			"address_line1": "1001 Ramsel Street",
-			"city": "Kirksville",
-			"state": "VT",
-			"postal_code": "60864",
+			"city": "Melbourne",
+			"state": "VIC",
+			"postal_code": "3000",
 		},
 		"phone": "(895) 295-4847",
 	},
@@ -196,9 +196,9 @@ employees = [
 		"date_of_joining": "2018-01-01",
 		"address": {
 			"address_line1": "1044 Vara Viaduct",
-			"city": "Topeka",
-			"state": "CT",
-			"postal_code": "01238",
+			"city": "Brisbane",
+			"state": "QLD",
+			"postal_code": "4000",
 		},
 		"phone": "(122) 785-7428",
 		"roles": ["Driver"],
@@ -210,9 +210,9 @@ employees = [
 		"date_of_joining": "2018-01-01",
 		"address": {
 			"address_line1": "269 Edith Park",
-			"city": "Edwardsville",
-			"state": "NH",
-			"postal_code": "81485",
+			"city": "Perth",
+			"state": "WA",
+			"postal_code": "6000",
 		},
 		"phone": "(602) 012-4480",
 		"roles": ["Driver"],
@@ -224,9 +224,9 @@ employees = [
 		"date_of_joining": "2018-01-01",
 		"address": {
 			"address_line1": "914 Fortuna Park",
-			"city": "Dinuba",
-			"state": "VT",
-			"postal_code": "63243",
+			"city": "Adelaide",
+			"state": "SA",
+			"postal_code": "5000",
 		},
 		"phone": "(396) 509-0076",
 	},
@@ -237,9 +237,9 @@ employees = [
 		"date_of_joining": "2018-01-01",
 		"address": {
 			"address_line1": "1120 Cleo Rand Glen",
-			"city": "Keizer",
-			"state": "CT",
-			"postal_code": "47329",
+			"city": "Hobart",
+			"state": "TAS",
+			"postal_code": "7000",
 		},
 		"phone": "(142) 627-2292",
 		"roles": ["Driver"],
@@ -251,9 +251,9 @@ employees = [
 		"date_of_joining": "2018-01-01",
 		"address": {
 			"address_line1": "1350 Drumm Rapids",
-			"city": "Coppell",
-			"state": "VT",
-			"postal_code": "00114",
+			"city": "Canberra",
+			"state": "ACT",
+			"postal_code": "2601",
 		},
 		"phone": "(926) 670-5011",
 		"roles": ["Driver"],
@@ -265,9 +265,9 @@ employees = [
 		"date_of_joining": "2023-06-19",
 		"address": {
 			"address_line1": "716 Crescent Hills",
-			"city": "Chicopee",
-			"state": "MA",
-			"postal_code": "23292",
+			"city": "Darwin",
+			"state": "NT",
+			"postal_code": "0800",
 		},
 		"phone": "(215) 326-9320",
 		"roles": ["Driver"],
@@ -279,9 +279,9 @@ employees = [
 		"date_of_joining": "2018-07-15",
 		"address": {
 			"address_line1": "17 Quesada Station",
-			"city": "Sidney",
-			"state": "ME",
-			"postal_code": "89989",
+			"city": "Sydney",
+			"state": "NSW",
+			"postal_code": "2000",
 		},
 		"phone": "(897) 608-1493",
 		"roles": ["Driver"],
@@ -293,9 +293,9 @@ employees = [
 		"date_of_joining": "2020-06-20",
 		"address": {
 			"address_line1": "672 Bacon Mews",
-			"city": "Fountain Hills",
-			"state": "MA",
-			"postal_code": "36604",
+			"city": "Melbourne",
+			"state": "VIC",
+			"postal_code": "3000",
 		},
 		"phone": "(159) 204-1976",
 	},
@@ -306,9 +306,9 @@ employees = [
 		"date_of_joining": "2023-07-31",
 		"address": {
 			"address_line1": "987 Townsend Parkway",
-			"city": "Bossier City",
-			"state": "ME",
-			"postal_code": "30671",
+			"city": "Brisbane",
+			"state": "QLD",
+			"postal_code": "4000",
 		},
 		"phone": "(694) 362-4755",
 	},
@@ -319,9 +319,9 @@ employees = [
 		"date_of_joining": "2021-09-18",
 		"address": {
 			"address_line1": "1227 Bradford Road",
-			"city": "Rexburg",
-			"state": "ME",
-			"postal_code": "38962",
+			"city": "Perth",
+			"state": "WA",
+			"postal_code": "6000",
 		},
 		"phone": "(159) 387-3606",
 	},
@@ -332,9 +332,9 @@ employees = [
 		"date_of_joining": "2023-09-27",
 		"address": {
 			"address_line1": "150 Massasoit Canyon",
-			"city": "San Bruno",
-			"state": "VT",
-			"postal_code": "86290",
+			"city": "Adelaide",
+			"state": "SA",
+			"postal_code": "5000",
 		},
 		"phone": "(908) 090-5112",
 	},
@@ -345,9 +345,9 @@ employees = [
 		"date_of_joining": "2018-08-25",
 		"address": {
 			"address_line1": "1086 Pratt Hills",
-			"city": "Hilton Head Island",
-			"state": "RI",
-			"postal_code": "34442",
+			"city": "Hobart",
+			"state": "TAS",
+			"postal_code": "7000",
 		},
 		"phone": "(987) 158-2480",
 	},
@@ -358,9 +358,9 @@ employees = [
 		"date_of_joining": "2021-05-15",
 		"address": {
 			"address_line1": "46 Hugo Lane",
-			"city": "Chino",
-			"state": "NH",
-			"postal_code": "25716",
+			"city": "Canberra",
+			"state": "ACT",
+			"postal_code": "2601",
 		},
 		"phone": "(436) 800-8302",
 	},
@@ -371,28 +371,28 @@ employees = [
 		"date_of_joining": "2021-03-19",
 		"address": {
 			"address_line1": "1280 Stratford Boulevard",
-			"city": "Hanford",
-			"state": "RI",
-			"postal_code": "20577",
+			"city": "Darwin",
+			"state": "NT",
+			"postal_code": "0800",
 		},
 		"phone": "(670) 845-0570",
 	},
 ]
 
 
-def setup_farm_price_list():
-	if not frappe.db.exists("Price List", "Farm Supplies"):
+def setup_price_lists():
+	if not frappe.db.exists("Price List", "General Supplies"):
 		pl = frappe.new_doc("Price List")
-		pl.price_list_name = "Farm Supplies"
+		pl.price_list_name = "General Supplies"
 		pl.buying = 1
-		pl.append("countries", {"country": "United States"})
+		pl.append("countries", {"country": "Australia"})
 		pl.save()
 
-	if not frappe.db.exists("Price List", "Farm Wholesale"):
+	if not frappe.db.exists("Price List", "General Wholesale"):
 		pl = frappe.new_doc("Price List")
-		pl.price_list_name = "Farm Wholesale"
+		pl.price_list_name = "General Wholesale"
 		pl.selling = 1
-		pl.append("countries", {"country": "United States"})
+		pl.append("countries", {"country": "Australia"})
 		pl.save()
 
 
@@ -413,7 +413,7 @@ def create_employees(settings, employees):
 		user.last_name = employee.name.split(" ")[1]
 		user.user_type = "System User"
 		user.username = f"{user.first_name[0].lower()}{user.last_name.lower()}"
-		user.time_zone = "America/New_York"
+		user.time_zone = "Australia/Perth"
 		user.email = f"""{unicodedata.normalize('NFKD', user.first_name[0].lower())}{unicodedata.normalize('NFKD', user.last_name.replace("'", "").lower())}@{company_domain}"""
 		user.user_type = "System User"
 		user.send_welcome_email = 0
@@ -445,7 +445,7 @@ def create_employees(settings, employees):
 		addr.address_line1 = employee.address.get("address_line1")
 		addr.city = employee.address.get("city")
 		addr.state = employee.address.get("state")
-		addr.country = "United States"
+		addr.country = "Australia"
 		addr.pincode = employee.address.get("postal_code")
 		addr.phone = employee.phone
 		addr.append("links", {"link_doctype": "Employee", "link_name": emp.name})
@@ -508,10 +508,10 @@ def create_asset_categories_and_item_groups(settings=None):
 			"accounts",
 			{
 				"company_name": company,
-				"fixed_asset_account": "1710 - Capital Equipment - QCF",
-				"accumulated_depreciation_account": "1780 - Accumulated Depreciation - QCF",
-				"depreciation_expense_account": "5303 - Depreciation - QCF",
-				"capital_work_in_progress_account": "1790 - CWIP Account - QCF",
+				"fixed_asset_account": "1710 - Capital Equipment - ESAU",
+				"accumulated_depreciation_account": "1780 - Accumulated Depreciation - ESAU",
+				"depreciation_expense_account": "5303 - Depreciation - ESAU",
+				"capital_work_in_progress_account": "1790 - CWIP Account - ESAU",
 			},
 		)
 		at.save()
@@ -713,7 +713,7 @@ def create_items_and_assets(settings=None):
 		a.asset_owner = "Company"
 		a.asset_owner_company = company
 		a.is_existing_asset = 1
-		a.cost_center = "Main - QCF"
+		a.cost_center = "Main - ESAU"
 		a.purchase_date = a.available_for_use_date = doc.acquisition_date
 		a.gross_purchase_amount = doc.vehicle_value
 		a.policy_number = doc.policy_no

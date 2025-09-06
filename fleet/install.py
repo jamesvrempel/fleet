@@ -19,9 +19,7 @@ def after_install():
 
 
 def install_states_and_provinces():
-	for state in list(pycountry.subdivisions.get(country_code="US")) + list(
-		pycountry.subdivisions.get(country_code="CA")
-	):
+	for state in list(pycountry.subdivisions.get(country_code="AU")):
 		if frappe.db.exists("State", {"state": state.name}):
 			continue
 		s = frappe.new_doc("State")
