@@ -685,9 +685,13 @@ def get_geofence_change(prior_geofence_ids, current_geofence_ids):
 		entered, exited = [], []
 	else:
 		entered = [
-			frappe.get_value("Location", {"traccar_geofence_id": gfid}) for gfid in list(current - prior)
+			loc
+			for gfid in list(current - prior)
+			if (loc := frappe.get_value("Location", {"traccar_geofence_id": gfid}))
 		]
 		exited = [
-			frappe.get_value("Location", {"traccar_geofence_id": gfid}) for gfid in list(prior - current)
+			loc
+			for gfid in list(prior - current)
+			if (loc := frappe.get_value("Location", {"traccar_geofence_id": gfid}))
 		]
 	return frappe._dict({"entered": entered, "exited": exited})
